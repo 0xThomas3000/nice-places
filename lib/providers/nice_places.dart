@@ -3,21 +3,18 @@ import 'package:flutter/foundation.dart';
 import '../models/place.dart';
 
 class NicePlaces with ChangeNotifier {
-  List<Place> _items = [];
+  final List<Place> _items = [];
 
   List<Place> get items {
     return [..._items];
   }
 
-  void addPlace(
-    String pickedTitle,
-    File pickedImage,
-  ) {
+  void addPlace(String pickedTitle, File pickedImage) {
     final newPlace = Place(
       id: DateTime.now().toString(),
       image: pickedImage,
       title: pickedTitle,
-      location: null as PlaceLocation,
+      location: null,
     );
     _items.add(newPlace);
     notifyListeners();
