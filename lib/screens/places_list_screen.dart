@@ -18,26 +18,35 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<NicePlaces>(
-        child: const Center(
-          child: Text('Got no places yet, start adding some!'),
-        ),
-        builder: (ctx, nicePlaces, ch) => nicePlaces.items.isEmpty
-            ? (ch as Widget)
-            : ListView.builder(
-                itemCount: nicePlaces.items.length,
-                itemBuilder: (ctx, i) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: FileImage(
-                      nicePlaces.items[i].image,
+      body: FutureBuilder(
+        future:
+            Provider.of<NicePlaces>(context, listen: false).fetchAndSetPlaces(),
+        builder: (ctx, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Consumer<NicePlaces>(
+                    child: const Center(
+                      child: Text('Got no places yet, start adding some!'),
                     ),
+                    builder: (ctx, nicePlaces, ch) => nicePlaces.items.isEmpty
+                        ? (ch as Widget)
+                        : ListView.builder(
+                            itemCount: nicePlaces.items.length,
+                            itemBuilder: (ctx, i) => ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: FileImage(
+                                  nicePlaces.items[i].image,
+                                ),
+                              ),
+                              title: Text(nicePlaces.items[i].title),
+                              onTap: () {
+                                // Go to detail page ...
+                              },
+                            ),
+                          ),
                   ),
-                  title: Text(nicePlaces.items[i].title),
-                  onTap: () {
-                    // Go to detail page ...
-                  },
-                ),
-              ),
       ),
     );
   }
