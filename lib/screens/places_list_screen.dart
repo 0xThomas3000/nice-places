@@ -21,32 +21,34 @@ class PlacesListScreen extends StatelessWidget {
       body: FutureBuilder(
         future:
             Provider.of<NicePlaces>(context, listen: false).fetchAndSetPlaces(),
-        builder: (ctx, snapshot) =>
-            snapshot.connectionState == ConnectionState.waiting
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Consumer<NicePlaces>(
-                    child: const Center(
-                      child: Text('Got no places yet, start adding some!'),
-                    ),
-                    builder: (ctx, nicePlaces, ch) => nicePlaces.items.isEmpty
-                        ? (ch as Widget)
-                        : ListView.builder(
-                            itemCount: nicePlaces.items.length,
-                            itemBuilder: (ctx, i) => ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: FileImage(
-                                  nicePlaces.items[i].image,
-                                ),
-                              ),
-                              title: Text(nicePlaces.items[i].title),
-                              onTap: () {
-                                // Go to detail page ...
-                              },
+        builder: (ctx, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<NicePlaces>(
+                child: const Center(
+                  child: Text('Got no places yet, start adding some!'),
+                ),
+                builder: (ctx, nicePlaces, ch) => nicePlaces.items.isEmpty
+                    ? (ch as Widget)
+                    : ListView.builder(
+                        itemCount: nicePlaces.items.length,
+                        itemBuilder: (ctx, i) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: FileImage(
+                              nicePlaces.items[i].image,
                             ),
                           ),
-                  ),
+                          title: Text(nicePlaces.items[i].title),
+                          subtitle: Text(
+                              nicePlaces.items[i].location!.address.toString()),
+                          onTap: () {
+                            // Go to detail page ...
+                          },
+                        ),
+                      ),
+              ),
       ),
     );
   }
