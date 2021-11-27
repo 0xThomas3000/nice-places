@@ -53,12 +53,16 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 16,
         ),
         onTap: widget.isSelecting ? _selectLocation : null,
-        markers: _pickedLocation == null
+        markers: (_pickedLocation == null && widget.isSelecting)
             ? {} // Need pass {} instead of null in Flutter 2
             : {
                 Marker(
                   markerId: const MarkerId('m1'),
-                  position: _pickedLocation as LatLng,
+                  position: _pickedLocation ??
+                      LatLng(
+                        widget.initialLocation.latitude,
+                        widget.initialLocation.longitude,
+                      ),
                 ),
               },
       ),
